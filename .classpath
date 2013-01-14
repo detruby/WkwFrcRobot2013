@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/dtruby/Documents/code/first/github/2013_Java_sunspotfrcsdk/sunspotfrcsdk/lib/networktables-crio.jar"/>
+	<classpathentry kind="lib" path="/Users/dtruby/Documents/code/first/github/2013_Java_sunspotfrcsdk/sunspotfrcsdk/lib/squawk.jar"/>
+	<classpathentry kind="lib" path="/Users/dtruby/Documents/code/first/github/2013_Java_sunspotfrcsdk/sunspotfrcsdk/lib/wpilibj.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
