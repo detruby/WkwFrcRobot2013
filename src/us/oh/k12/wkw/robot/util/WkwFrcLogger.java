@@ -67,6 +67,10 @@ public class WkwFrcLogger extends WkwFrcLoggerBase {
 			final Exception pEx) {
 
 		WkwFrcLogger.getInstance().sendMulticast(new Date(), pClazz, "E", pMethod, pMessage);
+
+		if (null != pEx) {
+			pEx.printStackTrace();
+		}
 	}
 
 	/**
@@ -85,16 +89,26 @@ public class WkwFrcLogger extends WkwFrcLoggerBase {
 	protected void sendMulticast(final Date pMessageDate, final String pClazz, final String pLevel,
 			final String pMethod, final String pMessage) {
 
-		// format the log record
-		final String aMsg = this.formatMessage(pMessageDate, pClazz, pLevel, pMethod, pMessage);
+		try {
 
-		// send data via NetworkTable
-		NetworkTable.getTable(WkwFrcLogger.NETWORK_TABLE_NAME).putString(
-				WkwFrcLogger.NETWORK_TABLE_FIELD_NAME, aMsg);
+			// System.out.println("sendMulticast started.");
 
-		// log locally on the robot
-		System.out.println(aMsg);
+			// format the log record
+			final String aMsg = this.formatMessage(pMessageDate, pClazz, pLevel, pMethod, pMessage);
 
+			// log locally on the robot
+			System.out.println(aMsg);
+
+			// send data via NetworkTable
+			NetworkTable.getTable(WkwFrcLogger.NETWORK_TABLE_NAME).putString(
+					WkwFrcLogger.NETWORK_TABLE_FIELD_NAME, aMsg);
+
+			// System.out.println("sendMulticast ended.");
+
+		} catch (Exception anEx) {
+			System.out.println("sendMulticast caught " + anEx.getClass().getName() + ", message="
+					+ anEx.getMessage() + ".");
+		}
 	}
 
 	/**

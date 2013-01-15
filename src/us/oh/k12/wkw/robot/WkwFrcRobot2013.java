@@ -14,7 +14,6 @@ import us.oh.k12.wkw.robot.util.SimpleDateFormat;
 import us.oh.k12.wkw.robot.util.WkwDashboard;
 import us.oh.k12.wkw.robot.util.WkwFrcLogger;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -33,6 +32,7 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 
 	private boolean autonomousMode = false;
 	private boolean teleopMode = false;
+	private boolean testMode = false;
 
 	public WkwFrcRobot2013() {
 		super();
@@ -127,7 +127,7 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 
 		try {
 
-			this.debug("disabledInit()", "Called.");
+			this.debug("disabledInit()", "Started.");
 
 			// reset teleop mode state
 			if (this.teleopMode) {
@@ -141,16 +141,29 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 				WkwDashboard.setAutonomousStateChange(false);
 			}
 
+			// reset autonomous mode state
+			if (this.testMode) {
+				this.testMode = false;
+				WkwDashboard.setTestStateChange(false);
+			}
+
 			// publish state change
 			WkwDashboard.setDisabledStateChange(true);
 
 			// publish data to the dashboard
 			this.updateStatus();
 
+			this.delayCounter = WkwFrcRobot2013.DELAY_COUNT_START;
+
+			this.debug("disabledInit()", "Ended.");
+
 		} catch (Exception anEx) {
 			this.error("disabledInit()", anEx);
 		}
 	}
+
+	private int delayCounter = 0;
+	private static final int DELAY_COUNT_START = 10;
 
 	/**
 	 * Periodic code for disabled mode should go here - will be called periodically at a regular
@@ -160,8 +173,12 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 
 		try {
 
-			// publish data to the dashboard
-			this.updateStatus();
+			if (this.delayCounter-- < 0) {
+				// we don't need to publish often during disabled.
+				this.delayCounter = WkwFrcRobot2013.DELAY_COUNT_START;
+				// publish data to the dashboard
+				this.updateStatus();
+			}
 
 		} catch (Exception anEx) {
 			this.error("disabledPeriodic()", anEx);
@@ -189,18 +206,24 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 
 		try {
 
-			this.debug("autonomousInit()", "Called.");
+			this.debug("autonomousInit()", "Started.");
 
-			// publish state change
 			WkwDashboard.setDisabledStateChange(false);
+			// publish state change
 			this.autonomousMode = true;
-			WkwDashboard.setAutonomousStateChange(true);
+			WkwDashboard.setAutonomousStateChange(false);
+			this.teleopMode = false;
+			WkwDashboard.setTeleopStateChange(true);
+			this.testMode = false;
+			WkwDashboard.setTestStateChange(false);
 
 			// schedule the autonomous command
 			this.autonomousCommand.start();
 
 			// publish data to the dashboard
 			this.updateStatus();
+
+			this.debug("autonomousInit()", "Ended.");
 
 		} catch (Exception anEx) {
 			this.error("autonomousInit()", anEx);
@@ -215,10 +238,16 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 		try {
 
 			// feed the watchdog timer
-			Watchdog.getInstance().feed();
+			this.getWatchdog().feed();
 
 			// run the command scheduler
-			Scheduler.getInstance().run();
+			// has five stages:
+			// 1. Poll the buttons
+			// 2. Execute/Remove the Commands.
+			// 3. Send values to SmartDashboard.
+			// 4. Add Commands.
+			// 5. Add Defaults.
+			// TODO: why gets nullpointerexception Scheduler.getInstance().run();
 
 			// publish data to the dashboard
 			this.updateStatus();
@@ -259,8 +288,12 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 
 			// publish state change
 			WkwDashboard.setDisabledStateChange(false);
+			this.autonomousMode = false;
+			WkwDashboard.setAutonomousStateChange(false);
 			this.teleopMode = true;
 			WkwDashboard.setTeleopStateChange(true);
+			this.testMode = false;
+			WkwDashboard.setTestStateChange(false);
 
 			// publish data to the dashboard
 			this.updateStatus();
@@ -277,11 +310,19 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 
 		try {
 
+			this.debug("teleopPeriodic()", "Called.");
+
 			// feed the watchdog timer
-			Watchdog.getInstance().feed();
+			this.getWatchdog().feed();
 
 			// run the command scheduler
-			Scheduler.getInstance().run();
+			// has five stages:
+			// 1. Poll the buttons
+			// 2. Execute/Remove the Commands.
+			// 3. Send values to SmartDashboard.
+			// 4. Add Commands.
+			// 5. Add Defaults.
+			// TODO: why gets nullpointerexception Scheduler.getInstance().run();
 
 			// publish data to the dashboard
 			this.updateStatus();
@@ -302,10 +343,37 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 
 	}
 
+	public void testInit() {
+
+		try {
+
+			this.debug("testInit()", "Called.");
+
+			// publish state change
+			WkwDashboard.setDisabledStateChange(false);
+			this.autonomousMode = false;
+			WkwDashboard.setAutonomousStateChange(false);
+			this.teleopMode = false;
+			WkwDashboard.setTeleopStateChange(false);
+			this.testMode = true;
+			WkwDashboard.setTestStateChange(true);
+
+		} catch (Exception anEx) {
+			this.error("testInit()", anEx);
+		}
+	}
+
 	public void testPeriodic() {
 
-		LiveWindow.run();
+		try {
 
+			this.debug("testPeriodic()", "Called.");
+
+			LiveWindow.run();
+
+		} catch (Exception anEx) {
+			this.error("testPeriodic()", anEx);
+		}
 	}
 
 	/*

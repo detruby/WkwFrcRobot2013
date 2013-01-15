@@ -20,6 +20,7 @@ public class WkwDashboard {
 	private static final String STATUS_NAME_ROBOT_STATE_DISABLED = "Robot Disabled State";
 	private static final String STATUS_NAME_ROBOT_STATE_AUTONOMOUS = "Robot Autonomous State";
 	private static final String STATUS_NAME_ROBOT_STATE_TELEOP = "Robot Teleop State";
+	private static final String STATUS_NAME_ROBOT_STATE_TEST = "Robot Test State";
 
 	private static final String STATUS_NAME_DRIVE_LEFT_MOTOR_SPEED = "Drive Left Motor Speed";
 	private static final String STATUS_NAME_DRIVE_RIGHT_MOTOR_SPEED = "Drive Right Motor Speed";
@@ -121,6 +122,10 @@ public class WkwDashboard {
 
 	public static void setTeleopStateChange(final boolean pState) {
 		WkwDashboard.getInstance().setStatus(WkwDashboard.STATUS_NAME_ROBOT_STATE_TELEOP, pState);
+	}
+
+	public static void setTestStateChange(final boolean pState) {
+		WkwDashboard.getInstance().setStatus(WkwDashboard.STATUS_NAME_ROBOT_STATE_TEST, pState);
 	}
 
 	public static void setDriveLeftMotorSpeed(final double pSpeed) {
