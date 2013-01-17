@@ -75,6 +75,7 @@ public class DriveSystem extends SystemBase {
 
 	private void testIo() {
 		// test digital side car hardware.
+		// this.findChannels();
 		// this.testAllGpios();
 		// this.testAllRelays();
 	}
@@ -85,12 +86,18 @@ public class DriveSystem extends SystemBase {
 
 		this.leftDrive = new Jaguar(WkwPrefs.getDriveLeftMotorControllerChannel());
 
+		this.debug("initDrive()", "leftDrive=" + WkwPrefs.getDriveLeftMotorControllerChannel()
+				+ ".");
+
 		LiveWindow.addActuator(DriveSystem.LIVEWINDOW_SUBSYSTEMNAME_DRIVESYSTEM,
 				DriveSystem.LIVEWINDOW_NAME_LEFTDRIVE, this.leftDrive);
 
 		// setup the right drive.
 
 		this.rightDrive = new Jaguar(WkwPrefs.getDriveRightMotorControllerChannel());
+
+		this.debug("initDrive()", "rightDrive=" + WkwPrefs.getDriveRightMotorControllerChannel()
+				+ ".");
 
 		LiveWindow.addActuator(DriveSystem.LIVEWINDOW_SUBSYSTEMNAME_DRIVESYSTEM,
 				DriveSystem.LIVEWINDOW_NAME_RIGHTDRIVE, this.rightDrive);
@@ -134,12 +141,12 @@ public class DriveSystem extends SystemBase {
 
 			if (DriveSystem.ARCADE_DRIVE_ENABLED) {
 
-				this.debug("initDefaultCommand()", "JoystickCmd.");
+				this.debug("initDefaultCommand()", "DriveWithJoystickCmd.");
 				this.setDefaultCommand(new DriveWithJoystickCmd());
 
 			} else {
 
-				this.debug("initDefaultCommand()", "JoysticksCmd.");
+				this.debug("initDefaultCommand()", "DriveWithJoysticksCmd.");
 				this.setDefaultCommand(new DriveWithJoysticksCmd());
 
 			}
@@ -361,61 +368,60 @@ public class DriveSystem extends SystemBase {
 		}
 	}
 
-	/*
-	protected boolean selfTestInInitalState() {
+	public boolean selfTestInInitalState() {
 		boolean isOk = true;
 
 		try {
 
 			if ((null != this.leftDrive) && (this.leftDrive.getSpeed() == 0)) {
 
-				this.reportSelfTestState(DriveSystem.SYSTEM_NAME, "Left Drive", "Off", true,
-						"Left drive motor is off.");
+				this.reportSelfTestState(DriveSystem.LIVEWINDOW_SUBSYSTEMNAME_DRIVESYSTEM,
+						"Left Drive", "Off", true, "Left drive motor is off.");
 
 			} else {
 
 				isOk = false;
-				this.reportSelfTestState(DriveSystem.SYSTEM_NAME, "Left Drive", "Not Off", false,
-						"Left drive motor is on. It should be off.");
+				this.reportSelfTestState(DriveSystem.LIVEWINDOW_SUBSYSTEMNAME_DRIVESYSTEM,
+						"Left Drive", "Not Off", false, "Left drive motor is on. It should be off.");
 
 			}
 
 			if ((null != this.rightDrive) && (this.rightDrive.getSpeed() == 0)) {
 
-				this.reportSelfTestState(DriveSystem.SYSTEM_NAME, "Right Drive", "Off", true,
-						"Right drive motor is off.");
+				this.reportSelfTestState(DriveSystem.LIVEWINDOW_SUBSYSTEMNAME_DRIVESYSTEM,
+						"Right Drive", "Off", true, "Right drive motor is off.");
 
 			} else {
 
 				isOk = false;
-				this.reportSelfTestState(DriveSystem.SYSTEM_NAME, "Right Drive", "Not Off", false,
+				this.reportSelfTestState(DriveSystem.LIVEWINDOW_SUBSYSTEMNAME_DRIVESYSTEM,
+						"Right Drive", "Not Off", false,
 						"Right drive motor is on. It should be off.");
 
 			}
 
 			if ((null != this.drive) && (this.drive.isAlive())) {
 
-				this.reportSelfTestState(DriveSystem.SYSTEM_NAME, "Drive", "Alive", true,
-						"Drive is alive.");
+				this.reportSelfTestState(DriveSystem.LIVEWINDOW_SUBSYSTEMNAME_DRIVESYSTEM, "Drive",
+						"Alive", true, "Drive is alive.");
 
 			} else {
 
 				isOk = false;
-				this.reportSelfTestState(DriveSystem.SYSTEM_NAME, "Drive", "Not Alive", false,
-						"Drive is not alive.");
+				this.reportSelfTestState(DriveSystem.LIVEWINDOW_SUBSYSTEMNAME_DRIVESYSTEM, "Drive",
+						"Not Alive", false, "Drive is not alive.");
 
 			}
 
 		} catch (Exception anEx) {
 			isOk = false;
-			this.reportSelfTestState(DriveSystem.SYSTEM_NAME, "Global", "Exception", false,
-					"Drive system caught exception name=" + anEx.getClass().getName()
-							+ ", message=" + anEx.getMessage() + ".");
+			this.reportSelfTestState(DriveSystem.LIVEWINDOW_SUBSYSTEMNAME_DRIVESYSTEM, "Global",
+					"Exception", false, "Drive system caught exception name="
+							+ anEx.getClass().getName() + ", message=" + anEx.getMessage() + ".");
 		}
 
 		return isOk;
 	}
-	*/
 
 	protected void testAllGpios() {
 
@@ -434,6 +440,8 @@ public class DriveSystem extends SystemBase {
 
 				this.debug("testAllGpios()", "GPIO channel=" + aChannel + ", value="
 						+ aDigitalInput.get() + ".");
+
+				Timer.delay(0.25);
 
 				aDigitalInput.free();
 

@@ -8,8 +8,8 @@ package us.oh.k12.wkw.robot;
 
 import java.util.Date;
 
-import us.oh.k12.wkw.robot.command.AutonomousCommandShooter;
 import us.oh.k12.wkw.robot.command.CommandBase;
+import us.oh.k12.wkw.robot.command.DriveInASquareCmd;
 import us.oh.k12.wkw.robot.util.SimpleDateFormat;
 import us.oh.k12.wkw.robot.util.WkwDashboard;
 import us.oh.k12.wkw.robot.util.WkwFrcLogger;
@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  */
 public class WkwFrcRobot2013 extends IterativeRobot {
 
-	private static final String VERSION = "3.0.0"; // program version
+	private static final String VERSION = "3.0.1"; // program version
 
 	private Command autonomousCommand;
 
@@ -69,8 +69,9 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 			//
 			// instantiate the command used for the autonomous period
 			//
-			this.autonomousCommand = new AutonomousCommandShooter();
+			// this.autonomousCommand = new AutonomousCommandShooter();
 			// this.autonomousCommand = new DoNothingCmd();
+			this.autonomousCommand = new DriveInASquareCmd();
 
 			this.initIo();
 
@@ -97,20 +98,17 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 	}
 
 	private void initIo() {
-
 		/*
-		this.debug("robotInit()", "DigitalInput kAnalogChannels="
-				+ DigitalInput.kAnalogChannels + ".");
-		this.debug("robotInit()", "DigitalInput kPwmChannels=" + DigitalInput.kPwmChannels
-				+ ".");
-		this.debug("robotInit()", "DigitalInput kRelayChannels=" + DigitalInput.kRelayChannels
-				+ ".");
-		this.debug("robotInit()", "DigitalInput kSolenoidChannels="
-				+ DigitalInput.kSolenoidChannels + ".");
-		this.debug("robotInit()", "DigitalInput kDigitalChannels="
-				+ DigitalInput.kDigitalChannels + ".");
+				this.debug("robotInit()", "DigitalInput kAnalogChannels=" + DigitalInput.kAnalogChannels
+						+ ".");
+				this.debug("robotInit()", "DigitalInput kPwmChannels=" + DigitalInput.kPwmChannels + ".");
+				this.debug("robotInit()", "DigitalInput kRelayChannels=" + DigitalInput.kRelayChannels
+						+ ".");
+				this.debug("robotInit()", "DigitalInput kSolenoidChannels="
+						+ DigitalInput.kSolenoidChannels + ".");
+				this.debug("robotInit()", "DigitalInput kDigitalChannels=" + DigitalInput.kDigitalChannels
+						+ ".");
 		*/
-
 	}
 
 	/*
@@ -163,7 +161,7 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 	}
 
 	private int delayCounter = 0;
-	private static final int DELAY_COUNT_START = 10;
+	private static final int DELAY_COUNT_START = 50;
 
 	/**
 	 * Periodic code for disabled mode should go here - will be called periodically at a regular
@@ -237,8 +235,13 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 
 		try {
 
+			// this.debug("autonomousPeriodic()", "Ended.");
+
 			// feed the watchdog timer
 			this.getWatchdog().feed();
+
+			// publish data to the dashboard
+			this.updateStatus();
 
 			// run the command scheduler
 			// has five stages:
@@ -247,10 +250,14 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 			// 3. Send values to SmartDashboard.
 			// 4. Add Commands.
 			// 5. Add Defaults.
-			// TODO: why gets nullpointerexception Scheduler.getInstance().run();
+			// TODO: why gets nullpointerexception
+			try {
 
-			// publish data to the dashboard
-			this.updateStatus();
+				Scheduler.getInstance().run();
+
+			} catch (NullPointerException aNpEx) {
+				this.error("teleopPeriodic()", null);
+			}
 
 		} catch (Exception anEx) {
 			this.error("autonomousPeriodic()", anEx);
@@ -296,7 +303,13 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 			WkwDashboard.setTestStateChange(false);
 
 			// publish data to the dashboard
-			this.updateStatus();
+			try {
+
+				this.updateStatus();
+
+			} catch (NullPointerException aNpEx) {
+				this.error("teleopPeriodic()", null);
+			}
 
 		} catch (Exception anEx) {
 			this.error("teleopInit()", anEx);
@@ -310,10 +323,13 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 
 		try {
 
-			this.debug("teleopPeriodic()", "Called.");
+			// this.debug("teleopPeriodic()", "Called.");
 
 			// feed the watchdog timer
 			this.getWatchdog().feed();
+
+			// publish data to the dashboard
+			this.updateStatus();
 
 			// run the command scheduler
 			// has five stages:
@@ -322,10 +338,14 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 			// 3. Send values to SmartDashboard.
 			// 4. Add Commands.
 			// 5. Add Defaults.
-			// TODO: why gets nullpointerexception Scheduler.getInstance().run();
+			// TODO: why gets nullpointerexception
+			try {
 
-			// publish data to the dashboard
-			this.updateStatus();
+				Scheduler.getInstance().run();
+
+			} catch (NullPointerException aNpEx) {
+				this.error("teleopPeriodic()", null);
+			}
 
 		} catch (Exception anEx) {
 			this.error("teleopPeriodic()", anEx);
@@ -367,7 +387,7 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 
 		try {
 
-			this.debug("testPeriodic()", "Called.");
+			// this.debug("testPeriodic()", "Called.");
 
 			LiveWindow.run();
 

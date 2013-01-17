@@ -16,6 +16,7 @@ import us.oh.k12.wkw.robot.command.CameraPanByCmd;
 import us.oh.k12.wkw.robot.command.CameraRotateToGatherer;
 import us.oh.k12.wkw.robot.command.CameraRotateToShooter;
 import us.oh.k12.wkw.robot.command.CameraTiltByCmd;
+import us.oh.k12.wkw.robot.command.DriveSelfTestCmd;
 import us.oh.k12.wkw.robot.command.GathererBackwardCmd;
 import us.oh.k12.wkw.robot.command.GathererTurnOffCmd;
 import us.oh.k12.wkw.robot.command.GathererTurnOnCmd;
@@ -179,6 +180,8 @@ public class OperatorInterface {
 
 			this.shooterControler = new Joystick(WkwPrefs.getGamepadPort());
 
+			this.debug("setupGamepad()", "shooterControler=" + WkwPrefs.getGamepadPort() + ".");
+
 			/*
 			 * 
 			 * 
@@ -216,6 +219,9 @@ public class OperatorInterface {
 		try {
 
 			this.rightJoystick = new Joystick(WkwPrefs.getJoystickRightPort());
+
+			this.debug("setupRightJoystick()", "rightJoystick=" + WkwPrefs.getJoystickRightPort()
+					+ ".");
 
 			/*
 			 * 
@@ -274,6 +280,9 @@ public class OperatorInterface {
 
 			this.leftJoystick = new Joystick(WkwPrefs.getJoystickLeftPort());
 
+			this.debug("setupLeftJoystick()", "leftJoystick=" + WkwPrefs.getJoystickLeftPort()
+					+ ".");
+
 			/*
 			 * 
 			 * 
@@ -289,6 +298,9 @@ public class OperatorInterface {
 
 				this.debug("setupLeftJoystick", "Left button 2=CameraRotateToShooter.");
 				new JoystickButton(this.leftJoystick, 2).whenPressed(new CameraRotateToShooter());
+
+				this.debug("setupLeftJoystick", "Left button 3=DriveSelfTestCmd.");
+				new JoystickButton(this.leftJoystick, 3).whenPressed(new DriveSelfTestCmd());
 
 				this.debug("setupLeftJoystick()", "Left button 4=ShooterTurnMotorOnCmd.");
 				new JoystickButton(this.leftJoystick, 4).whenPressed(new ShooterTurnMotorOnCmd());

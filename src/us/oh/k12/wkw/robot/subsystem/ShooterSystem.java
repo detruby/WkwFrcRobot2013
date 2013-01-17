@@ -50,7 +50,7 @@ public class ShooterSystem extends ShooterPlunger {
 
 			this.initMotor();
 
-			this.initSonar();
+			// this.initSonar();
 
 			// TODO: wire gyro and connect - this.initGyro();
 
@@ -85,7 +85,7 @@ public class ShooterSystem extends ShooterPlunger {
 
 		this.sonarSensor = new AnalogChannel(WkwPrefs.getShooterSonarSensorChannel());
 
-		if (null == this.shootMotor) {
+		if (null == this.sonarSensor) {
 
 			this.error("initSonar()", "Sonar sensor not found.", null);
 
@@ -99,8 +99,8 @@ public class ShooterSystem extends ShooterPlunger {
 
 		this.shootMotor = new Jaguar(WkwPrefs.getShooterMotorControllerChannel());
 
-		//LiveWindow.addActuator("ShooterSystem", "shootMotor", this.shootMotor);
-		
+		// LiveWindow.addActuator("ShooterSystem", "shootMotor", this.shootMotor);
+
 		if (null == this.shootMotor) {
 
 			this.error("initMotor()", "Shoot motor not found.", null);
@@ -154,8 +154,6 @@ public class ShooterSystem extends ShooterPlunger {
 				this.batteryVoltage = DriverStation.getInstance().getBatteryVoltage();
 				WkwDashboard.setBatteryVolts(DriverStation.getInstance().getBatteryVoltage());
 			}
-
-			// }
 
 			if (null != this.sonarSensor) {
 

@@ -11,6 +11,7 @@ import java.util.Date;
 import us.oh.k12.wkw.robot.util.SimpleDateFormat;
 import us.oh.k12.wkw.robot.util.WkwFrcLogger;
 import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.util.AllocationException;
 
@@ -60,8 +61,11 @@ public abstract class SystemBase extends Subsystem {
 				aJaguar = new Jaguar(idx);
 				this.dumpJaguar(idx, aJaguar);
 				aJaguar.set(1.0);
-				this.debug("findChannels()", "get=" + aJaguar.get() + ".");
-
+				this.debug("findChannels()", "channel[" + idx + "] get=" + aJaguar.get() + ".");
+				Timer.delay(0.25);
+				aJaguar.set(0.0);
+				aJaguar.free();
+				
 			} catch (AllocationException anAloEx) {
 				this.error("findChannels()", "AllocationException.", null);
 			}
