@@ -13,7 +13,7 @@ public class AutonomousFindAndShootCmd extends CommandWithTimeout {
 
 	public AutonomousFindAndShootCmd() {
 		super("AutonomousFindAndShootCmd", 30.000000);
-		this.requires(this.getCameraSystem());
+	//	this.requires(this.getCameraSystem());
 		this.requires(this.getShooterSystem());
 		this.requires(this.getDriveSystem());
 	}

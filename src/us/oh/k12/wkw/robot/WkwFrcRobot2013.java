@@ -9,7 +9,7 @@ package us.oh.k12.wkw.robot;
 import java.util.Date;
 
 import us.oh.k12.wkw.robot.command.CommandBase;
-import us.oh.k12.wkw.robot.command.DriveInASquareCmd;
+import us.oh.k12.wkw.robot.command.SpinCmd;
 import us.oh.k12.wkw.robot.util.SimpleDateFormat;
 import us.oh.k12.wkw.robot.util.WkwDashboard;
 import us.oh.k12.wkw.robot.util.WkwFrcLogger;
@@ -71,7 +71,8 @@ public class WkwFrcRobot2013 extends IterativeRobot {
 			//
 			// this.autonomousCommand = new AutonomousCommandShooter();
 			// this.autonomousCommand = new DoNothingCmd();
-			this.autonomousCommand = new DriveInASquareCmd();
+			this.autonomousCommand = new SpinCmd(); //Mitch Domecq was here.
+			//Previous command: "DriveInASquareCmd". This one should be safer to test.
 
 			this.initIo();
 

@@ -13,7 +13,7 @@ public class CameraRotateToGatherer extends CommandBase {
 
 	public CameraRotateToGatherer() {
 		super("CameraRotateToGatherer");
-		this.requires(this.getCameraSystem());
+	//	this.requires(this.getCameraSystem());
 	}
 
 	protected void execute() {

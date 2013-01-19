@@ -16,7 +16,7 @@ public class AutonomousCameraTrackTarget extends CommandWithTimeout {
 	 */
 	public AutonomousCameraTrackTarget() {
 		super("AutonomousCameraTrackTargetCmd", 30.000000);
-		this.requires(this.getCameraSystem());
+	//	this.requires(this.getCameraSystem());
 	}
 
 	protected void initialize() {

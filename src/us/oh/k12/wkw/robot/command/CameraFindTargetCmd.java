@@ -17,7 +17,7 @@ public class CameraFindTargetCmd extends CommandWithTimeout {
 
 	public CameraFindTargetCmd(final double pTimeout) {
 		super("CameraFindTargetCmd", pTimeout);
-		this.requires(this.getCameraSystem());
+	//	this.requires(this.getCameraSystem());
 	}
 
 	protected void execute() {

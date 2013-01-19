@@ -20,7 +20,7 @@ public class CameraTiltByCmd extends CommandBase {
 	public CameraTiltByCmd(final double pAngle) {
 		super("CameraTiltByCmd");
 		this.angle = pAngle;
-		this.requires(this.getCameraSystem());
+	//	this.requires(this.getCameraSystem());
 	}
 
 	protected void execute() {

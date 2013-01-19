@@ -12,7 +12,7 @@ package us.oh.k12.wkw.robot.command;
 public class CameraRotateToShooter extends CommandBase {
 	public CameraRotateToShooter() {
 		super("CameraRotateToShooter");
-		this.requires(this.getCameraSystem());
+		//this.requires(this.getCameraSystem());
 	}
 
 	protected void execute() {

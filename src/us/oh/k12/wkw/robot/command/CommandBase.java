@@ -11,14 +11,15 @@ import us.oh.k12.wkw.robot.subsystem.BeachingSystem;
 import us.oh.k12.wkw.robot.subsystem.CameraSystem;
 import us.oh.k12.wkw.robot.subsystem.DriveSystem;
 import us.oh.k12.wkw.robot.subsystem.GathererSystem;
+import us.oh.k12.wkw.robot.subsystem.LaunchFrisbeeSystem;
 import us.oh.k12.wkw.robot.subsystem.ShooterSystem;
 import us.oh.k12.wkw.robot.util.WkwDashboard;
 import us.oh.k12.wkw.robot.util.WkwFrcLogger;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * The base for all commands. All atomic commands should subclass CommandBase. CommandBase creates
- * and stores each control system.
+ * The base for all commands. All atomic commands should subclass CommandBase.
+ * CommandBase creates and stores each control system.
  */
 public abstract class CommandBase extends Command {
 
@@ -30,21 +31,24 @@ public abstract class CommandBase extends Command {
 	// Create a single static instance of all of your subsystems
 
 	// drive system
-	// NOTE: this system must be initialized first because it checks all sensors - and we need to do
+	// NOTE: this system must be initialized first because it checks all sensors
+	// - and we need to do
 	// this before the other systems allocate (lock) them.
 	private static DriveSystem driveSystem = new DriveSystem();
 
+	private static LaunchFrisbeeSystem launchSystem = new LaunchFrisbeeSystem();
+
 	// beaching system
-	private static BeachingSystem beachingSystem = new BeachingSystem();
+	// private static BeachingSystem beachingSystem = new BeachingSystem();
 
 	// gatherer system
-	private static GathererSystem gathererSystem = new GathererSystem();
+	// private static GathererSystem gathererSystem = new GathererSystem();
 
 	// ball shooter system
-	private static ShooterSystem shooterSystem = new ShooterSystem();
+	// private static ShooterSystem shooterSystem = new ShooterSystem();
 
 	// camera system
-	private static CameraSystem cameraSystem = new CameraSystem();
+	// private static CameraSystem cameraSystem = new CameraSystem();
 
 	public static void init() {
 		// This MUST be here. If the OI creates Commands (which it very likely
@@ -56,10 +60,11 @@ public abstract class CommandBase extends Command {
 
 		// Show what command your subsystem is running on the SmartDashboard
 		WkwDashboard.putData(CommandBase.driveSystem);
-		WkwDashboard.putData(CommandBase.beachingSystem);
-		WkwDashboard.putData(CommandBase.gathererSystem);
-		WkwDashboard.putData(CommandBase.shooterSystem);
-		WkwDashboard.putData(CommandBase.cameraSystem);
+		WkwDashboard.putData(CommandBase.launchSystem);
+		// WkwDashboard.putData(CommandBase.beachingSystem);
+		// WkwDashboard.putData(CommandBase.gathererSystem);
+		// WkwDashboard.putData(CommandBase.shooterSystem);
+		// WkwDashboard.putData(CommandBase.cameraSystem);
 
 	}
 
@@ -67,14 +72,16 @@ public abstract class CommandBase extends Command {
 		try {
 
 			CommandBase.driveSystem.updateStatus();
-			CommandBase.beachingSystem.updateStatus();
-			CommandBase.gathererSystem.updateStatus();
-			CommandBase.shooterSystem.updateStatus();
-			CommandBase.cameraSystem.updateStatus();
+			CommandBase.launchSystem.updateStatus();
+			// CommandBase.beachingSystem.updateStatus();
+			// CommandBase.gathererSystem.updateStatus();
+			// CommandBase.shooterSystem.updateStatus();
+			// CommandBase.cameraSystem.updateStatus();
 
 		} catch (Exception anEx) {
-			WkwFrcLogger.error(CommandBase.class.getName(), "updateStatus()", "Exception name="
-					+ anEx.getClass().getName() + ", message=" + anEx.getMessage() + ".", anEx);
+			WkwFrcLogger.error(CommandBase.class.getName(), "updateStatus()",
+					"Exception name=" + anEx.getClass().getName()
+							+ ", message=" + anEx.getMessage() + ".", anEx);
 		}
 	}
 
@@ -91,7 +98,8 @@ public abstract class CommandBase extends Command {
 	}
 
 	protected boolean isFinished() {
-		return true; // the default implementation if to end the command immediately.
+		return true; // the default implementation if to end the command
+						// immediately.
 	}
 
 	protected void end() {
@@ -107,23 +115,27 @@ public abstract class CommandBase extends Command {
 	}
 
 	protected BeachingSystem getBeachingSystem() {
-		return CommandBase.beachingSystem;
+		return null; // CommandBase.beachingSystem;
 	}
 
 	protected DriveSystem getDriveSystem() {
 		return CommandBase.driveSystem;
 	}
 
+	protected LaunchFrisbeeSystem getLaunchSystem() {
+		return CommandBase.launchSystem;
+	}
+
 	protected GathererSystem getGathererSystem() {
-		return CommandBase.gathererSystem;
+		return null; // CommandBase.gathererSystem;
 	}
 
 	protected ShooterSystem getShooterSystem() {
-		return CommandBase.shooterSystem;
+		return null; // CommandBase.shooterSystem;
 	}
 
 	protected CameraSystem getCameraSystem() {
-		return CommandBase.cameraSystem;
+		return null; // CommandBase.cameraSystem;
 	}
 
 	protected boolean isTimedOut() {
@@ -137,7 +149,6 @@ public abstract class CommandBase extends Command {
 	/*
 	 * 
 	 * support methods.
-	 * 
 	 */
 
 	protected void debug(final String pMethod, final String pMessage) {
@@ -149,21 +160,25 @@ public abstract class CommandBase extends Command {
 	}
 
 	protected void reportCommandTimeout() {
-		WkwFrcLogger.info(this.getClassName(), "reportCommandTimeout()",
-				" System:" + this.getName()
-						+ ", Sensor:N/A, State:N/A, Passed:false, Message:Command timed out.");
+		WkwFrcLogger
+				.info(this.getClassName(),
+						"reportCommandTimeout()",
+						" System:"
+								+ this.getName()
+								+ ", Sensor:N/A, State:N/A, Passed:false, Message:Command timed out.");
 	}
 
 	private String formatException(final Exception pEx) {
-		return (null == pEx ? "." : pEx.getClass().getName() + ", message=" + pEx.getMessage()
-				+ ".");
+		return (null == pEx ? "." : pEx.getClass().getName() + ", message="
+				+ pEx.getMessage() + ".");
 	}
 
 	protected void error(final String pMethod, final Exception pEx) {
 		this.error(pMethod, this.formatException(pEx), pEx);
 	}
 
-	protected void error(final String pMethod, final String pMessage, final Exception pEx) {
+	protected void error(final String pMethod, final String pMessage,
+			final Exception pEx) {
 		WkwFrcLogger.error(this.getClassName(), pMethod, pMessage, pEx);
 		if (null != pEx) {
 			pEx.printStackTrace();

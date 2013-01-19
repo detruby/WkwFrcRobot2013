@@ -20,7 +20,7 @@ public class CameraPanByCmd extends CommandBase {
 	public CameraPanByCmd(final double pAngle) {
 		super("CameraPanByCmd");
 		this.angle = pAngle;
-		this.requires(this.getCameraSystem());
+//		this.requires(this.getCameraSystem());
 	}
 
 	protected void execute() {
